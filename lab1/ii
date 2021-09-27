@@ -1,0 +1,13 @@
+#!/bin/bash
+
+end="q"
+
+read tmp
+
+while [[ "$tmp" != "$end" ]]
+do
+	buf="$buf$tmp"
+	read tmp
+done
+
+echo "$buf"

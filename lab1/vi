@@ -1,0 +1,8 @@
+#!/bin/bash
+
+touch full.log
+
+awk '$3 == "(WW)" || $3 == "(II)"'  /var/log/anaconda/X.log > full.log
+
+sort full.log -r -k3 -o full.log full.log
+sed -i -e 's/(II)/Information:/' -i -e 's/(WW)/Warning:/' full.log

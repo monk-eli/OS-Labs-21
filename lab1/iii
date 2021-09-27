@@ -1,0 +1,28 @@
+#!/bin/bash
+
+echo -e "1)nano\n2)vi\n3)links\n4)Leave menu\n"
+echo -n "Make your choice: "
+
+read choice
+
+case "$choice" in
+	1)
+		echo "Launching nano..."
+		nano
+		;;
+	2)
+		echo "Launching vi..."
+		vi
+		;;
+	3)
+		echo "Launching links..."
+		links
+		;;
+	4)
+		echo "Leaving menu..."
+		exit
+		;;
+	*)
+		echo "There is no such option."
+		;;
+esac
