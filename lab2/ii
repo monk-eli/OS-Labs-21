@@ -1,0 +1,4 @@
+#!/bin/bash
+
+touch sbin.lst
+ps a x o pid,command | grep "/sbin/" | awk '{print $1}' > sbin.lst

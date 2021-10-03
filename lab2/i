@@ -1,3 +1,4 @@
 #!/bin/bash
 
-
+touch process.lst
+ps a -u user -o pid,command | awk '{print $1":"$2}' > process.lst

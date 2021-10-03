@@ -1,0 +1,17 @@
+#!/bin/bash
+
+touch art.lst
+
+for pid in $(ps -A -o pid | tail -n +2)
+do
+	ppid=$(grep -E -h -s -i "ppid:\s(.+)" "/proc/"$pid"/status" | grep -o "[0-9]\+")
+	ser=$(grep -E -h -s -i "se.sum_exec_runtime(.+)" "/proc/"$pid"/sched" | grep -o "[0-9]\+.[0-9]\+")
+	switches=$(grep -E -h -s -i "nr_switches(.+)" "/proc/"$pid"/sched" | grep -o "[0-9]\+")
+if [[ $ser != "" ]]
+	then
+		art=`echo "scale=5; $ser/$switches" | bc | awk '{printf "%f", $0}'`
+		echo "$pid : $ppid : $art" >> art.lst
+	fi
+done
+
+column -t art.lst | sort -k3 -n -o art.lst

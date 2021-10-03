@@ -1,0 +1,27 @@
+#!/bin/bash
+
+list='art.lst'
+process_count=0
+art_sum=0
+prev_ppid=$(head -n 1 $list | awk '{print $3}')
+
+while read line
+do
+	current_ppid=$(echo $line | awk '{print $3}')
+	current_art=$(echo $line |awk '{print $5}')
+	if [[ $current_ppid == $prev_ppid ]]
+	then
+		process_count=$((process_count+1))
+		art_sum=`echo "scale=5; $art_sum+$current_art" | bc | awk '{printf "%f", $0}'`
+	else
+		avg_art=`echo "scale=5; $art_sum/$process_count" | bc | awk '{printf "%f", $0}'`
+		sed -i "/$line/i $prev_ppid is $avg_art" "$list"
+
+		process_count=1
+		prev_ppid=$current_ppid
+		art_sum=$current_art
+	fi
+done < "$list"
+
+avg_art=`echo "scale=5; $art_sum/$process_count" | bc | awk '{printf "%f", $0}'`
+echo "$prev_ppid is $avg_art" >> $list
