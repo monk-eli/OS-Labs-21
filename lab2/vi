@@ -1,0 +1,16 @@
+#!/bin/bash
+
+max_VmRSS="0"
+pid_max=""
+
+for pid in $(ps -A -o pid | tail -n +2)
+do
+	VmRSS=$(grep -E -h -s -i "VmRSS:\s(.+)" "/proc/"$pid"/status" | grep -o "[0-9]\+")
+	if [[ $VmRSS != "" && $VmRSS -ge $max_VmRSS ]]
+	then
+		max_VmRSS=$VmRSS
+		pid_max=$pid
+	fi
+done
+
+echo "Maximum memory allocated for PID: $pid_max - $max_VmRSS bytes"
