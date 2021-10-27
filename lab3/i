@@ -1,0 +1,6 @@
+#!/bin/bash
+
+ex_time=$(date '+%F_%T')
+
+mkdir ~/test && { echo "catalog test was created successfully" > ~/report ; touch ~/test/$ex_time ; }
+ping net_nikogo.ru || echo "$(date '+%F_%T') ERROR: host is unreachable" >> ~/report

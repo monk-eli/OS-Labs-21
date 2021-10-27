@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo "*/1 * * * 3 /home/user/OS-Labs/lab3/i" | crontab

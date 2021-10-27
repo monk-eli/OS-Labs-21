@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for pid in $(ps -A -o pid | tail -n +2)
+do
+	exe=$(cat /proc/$pid/exe)
+	echo "$pid - $exe"
+done
