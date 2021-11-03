@@ -1,0 +1,6 @@
+#!/bin/bash
+/home/user/OS-Labs/lab3/iv-gen & pid1=$!
+/home/user/OS-Labs/lab3/iv-gen &
+/home/user/OS-Labs/lab3/iv-gen &
+
+renice +10 -p "$pid1"

@@ -1,0 +1,40 @@
+#!/bin/bash
+
+echo $$ > .pid
+cmd=""
+res=1
+
+TERM()
+{
+	echo "Trapped SIGTERM - Abort"
+	rm -rf .pid
+	exit 0
+}
+
+SIG1()
+{
+	cmd="+"
+}
+
+SIG2()
+{
+	cmd="*"
+}
+
+trap 'TERM' SIGTERM
+trap 'SIG1' USR1
+trap 'SIG2' USR2
+
+while true
+do
+	case "$cmd" in
+		"+")
+			res=$(($res + 2))
+		;;
+		"*")
+			res=$(($res * 2))
+		;;
+	esac
+	sleep 1
+	echo $res
+done

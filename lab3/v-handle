@@ -1,0 +1,39 @@
+#!/bin/bash
+
+cmd="+"
+res=1
+
+tail -f pipe |
+while true
+do
+	read input
+	
+	case $input in
+		"+")
+			cmd="$input"
+		;;
+		"*")
+			cmd="$input"
+		;;
+		"QUIT")
+			killall tail
+			exit 0
+		;;
+		[0-9]*)
+			case $cmd in
+				"+")
+					res=$(($res + $input))
+					echo "result -> $res"
+				;;
+				"*")
+					res=$(($res * $input))
+					echo "result -> $res"
+				;;
+			esac
+		;;
+		*)
+			killall tail
+			exit 1
+		;;
+	esac
+done
