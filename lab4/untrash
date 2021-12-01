@@ -1,0 +1,40 @@
+#!/bin/bash
+
+file_name=$1
+
+if [ $# -ne 1 ]
+then
+	echo "invalid arguments"
+	exit 1
+fi
+
+for line in $(grep -hs "/$file_name" $HOME/.trash.log)
+do
+	echo $line
+done
+
+for line in $(grep -hs "/$file_name" $HOME/.trash.log)
+do
+	untrash_path=$(echo $line | awk -F "=" '{print $1}')
+	untrash_ref=$(echo $line | awk -F "=" '{print $2}')
+
+	echo "UNTRASH '$untrash_path'? (y/n)"
+	read input
+
+	if [ "$input" == "y" ]
+	then
+		restore_dir=$(echo "$untrash_path" | awk -F "/$1" '{print $1}')
+		if [ ! -d "$restore_dir" ]
+		then
+			echo "Directory $restore_dir doesn't exist. Restoring in $HOME"
+			restore_dir=$HOME
+		fi
+
+		while [ -f "$restore_dir/$file_name" ]
+		do
+			read -p "File $file_name already exist. Input new name: " file_name<&1
+		done
+		ln "$HOME/.trash/$untrash_ref" "$restore_dir/$file_name"
+		rm "$HOME/.trash/$untrash_ref"
+	fi
+done

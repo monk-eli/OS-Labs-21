@@ -1,0 +1,28 @@
+#!/bin/bash
+
+file_name=$1
+
+if [ $# -ne 1 ]
+then
+	echo "invalid arguments"
+	exit 1
+fi
+
+if [ ! -f $PWD/$file_name ]
+then
+	echo "no such file in this directory"
+	exit 1
+fi
+
+if  [ ! -d $HOME/.trash ]
+then
+	mkdir $HOME/.trash
+fi
+
+link_name=$(date '+%d-%m-%Y:%H-%M-%S')
+echo "$link_name"
+touch $HOME/.trash/$link_name
+
+ln -f $file_name "$HOME/.trash/$link_name"
+rm -f $file_name
+echo -e "$PWD/$file_name=$link_name" >> $HOME/.trash.log

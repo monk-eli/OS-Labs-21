@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [ -d "$HOME/restore" ]
+then
+	rm -rf "$HOME/restore"
+fi
+
+mkdir "$HOME/restore"
+
+
+latest_backup=$(ls "$HOME" | grep -E "^Backup-[[:digit:]]{2}-[[:digit:]]{2}-[[:digit:]]{2}$" | sort | tail -n1)
+
+if [ -z "$latest_backup" ]
+then
+	echo "Nothing to restore"
+	exit 1
+fi
+
+for line in $(ls "$HOME/$latest_backup" | grep -vE ".[[:digit:]]{2}-[[:digit:]]{2}-[[:digit:]]{2}$")
+do
+	cp "$HOME/$latest_backup/$line" "$HOME/restore/"
+done
